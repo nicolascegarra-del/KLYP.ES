@@ -1,11 +1,18 @@
-# Usamos una imagen ligera de Nginx basada en Alpine Linux
 FROM nginx:alpine
 
-# Copiamos los archivos estáticos al directorio de Nginx
-COPY . /usr/share/nginx/html
+# Puerto por defecto (sobreescribible desde Coolify)
+ENV PORT=80
 
-# Exponemos el puerto 80
-EXPOSE 80
+# Archivos estáticos
+COPY index.html styles.css logo.png /usr/share/nginx/html/
 
-# Comando para ejecutar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Plantilla de configuración de nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+
+# Script de arranque que aplica las variables de entorno
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+EXPOSE ${PORT}
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
