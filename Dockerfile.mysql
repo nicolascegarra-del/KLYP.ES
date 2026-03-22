@@ -1,0 +1,2 @@
+FROM mysql:8.0
+COPY base_datos.sql /docker-entrypoint-initdb.d/base_datos.sql

@@ -1,18 +1,16 @@
-FROM nginx:alpine
+FROM php:8.2-apache
 
-# Puerto por defecto (sobreescribible desde Coolify)
-ENV PORT=80
+# Extensiones necesarias: PDO + MySQL
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Archivos estáticos
-COPY index.html styles.css logo.png /usr/share/nginx/html/
+# Habilitar mod_rewrite
+RUN a2enmod rewrite
 
-# Plantilla de configuración de nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+# Copiar el código al directorio raíz de Apache
+COPY . /var/www/html/
 
-# Script de arranque que aplica las variables de entorno
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# Permisos para subida de imágenes
+RUN chown -R www-data:www-data /var/www/html/assets \
+    && chmod -R 775 /var/www/html/assets
 
-EXPOSE ${PORT}
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
+EXPOSE 80

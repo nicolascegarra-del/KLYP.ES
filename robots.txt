@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /db.php
+Disallow: /procesar_contacto.php
+Allow: /
+
+Sitemap: https://www.klyp.es/sitemap.php

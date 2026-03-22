@@ -1,0 +1,37 @@
+services:
+
+  web:
+    build: .
+    container_name: klyp_web
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: klyp_db
+      DB_USER: klyp_user
+      DB_PASS: klyp_pass
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    container_name: klyp_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: klyp_db
+      MYSQL_USER: klyp_user
+      MYSQL_PASSWORD: klyp_pass
+    volumes:
+      - klyp_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uklyp_user", "-pklyp_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  klyp_mysql_data:
