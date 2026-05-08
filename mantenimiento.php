@@ -141,7 +141,7 @@
     </div>
 </div>
 
-<footer>&copy; <?php echo date('Y'); ?> KLYP · Desarrollo de Software e IA</footer>
+<footer>&copy; <?php echo date('Y'); ?> KLYP · Desarrollo de Software e IA &nbsp;·&nbsp; <a href="admin/index.php" style="color:rgba(255,255,255,0.3); text-decoration:none;">Panel Admin</a></footer>
 
 </body>
 </html>
