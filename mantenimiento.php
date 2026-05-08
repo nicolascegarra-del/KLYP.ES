@@ -18,8 +18,8 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
-            overflow: hidden;
+            padding: 40px 20px 80px;
+            overflow-x: hidden;
         }
 
         .bg-glow {
@@ -27,8 +27,8 @@
             top: -200px;
             left: 50%;
             transform: translateX(-50%);
-            width: 800px;
-            height: 800px;
+            width: min(800px, 100vw);
+            height: min(800px, 100vw);
             background: radial-gradient(circle, rgba(46,109,180,0.15) 0%, transparent 70%);
             pointer-events: none;
         }
@@ -38,6 +38,8 @@
         }
         .logo img {
             height: 48px;
+            max-width: 180px;
+            width: auto;
         }
 
         .badge {
@@ -57,9 +59,9 @@
         }
 
         h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(1.75rem, 5vw, 3.5rem);
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.2;
             margin-bottom: 20px;
             color: #fff;
         }
@@ -68,11 +70,12 @@
         }
 
         p {
-            font-size: 1.1rem;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
             color: rgba(255,255,255,0.6);
             max-width: 480px;
             line-height: 1.7;
             margin-bottom: 48px;
+            padding: 0 4px;
         }
 
         .divider {
@@ -85,31 +88,92 @@
 
         .features {
             display: flex;
-            gap: 24px;
+            gap: 16px;
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 56px;
+            width: 100%;
+            max-width: 720px;
         }
         .feature {
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
-            padding: 20px 28px;
+            padding: 16px 24px;
             font-size: 0.95rem;
             color: rgba(255,255,255,0.7);
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            flex: 1 1 160px;
         }
         .feature-icon {
             font-size: 1.4rem;
+            flex-shrink: 0;
         }
 
         footer {
             font-size: 0.8rem;
             color: rgba(255,255,255,0.25);
-            position: fixed;
-            bottom: 24px;
+            margin-top: auto;
+            padding-top: 32px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 32px 16px 48px;
+                justify-content: flex-start;
+                padding-top: 48px;
+            }
+            .logo {
+                margin-bottom: 32px;
+            }
+            .logo img {
+                height: 38px;
+                max-width: 140px;
+            }
+            .badge {
+                font-size: 0.78rem;
+                margin-bottom: 24px;
+            }
+            h1 {
+                font-size: clamp(1.5rem, 7vw, 2.2rem);
+                margin-bottom: 16px;
+            }
+            p {
+                margin-bottom: 32px;
+            }
+            .divider {
+                margin-bottom: 32px;
+            }
+            .features {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                margin-bottom: 40px;
+            }
+            .feature {
+                flex: none;
+                width: 100%;
+                padding: 14px 20px;
+            }
+            footer {
+                font-size: 0.72rem;
+                padding-top: 24px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            body {
+                padding: 40px 24px 60px;
+            }
+            .features {
+                gap: 14px;
+            }
+            .feature {
+                flex: 1 1 40%;
+            }
         }
     </style>
 </head>

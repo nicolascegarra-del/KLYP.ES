@@ -31,8 +31,20 @@ PHP
         [ $TRIES -ge 200 ] && exit 0
         sleep 3
     done
-    grep -v -iE "^create database|^use " /var/www/html/init.sql | \
-        mysql --skip-ssl -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
+    # Always apply DDL (CREATE TABLE IF NOT EXISTS) — safe to re-run on every deploy
+    awk '/^-- Datos iniciales/{exit} {print}' /var/www/html/init.sql \
+        | grep -v -iE "^(create database|use )" \
+        | mysql --skip-ssl -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
+
+    # Only seed initial data when the database is empty (first deploy or after volume wipe).
+    # Skipping this on existing installs preserves all admin panel configuration.
+    CONFIG_EXISTS=$(mysql --skip-ssl -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" \
+        "${KLYP_DB_NAME}" -sNe "SELECT COUNT(*) FROM configuracion;" 2>/dev/null || echo "0")
+
+    if [ "${CONFIG_EXISTS}" = "0" ]; then
+        awk '/^-- Datos iniciales/{found=1} found{print}' /var/www/html/init.sql \
+            | mysql --skip-ssl -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
+    fi
 ) &
 
 exec "$@"
