@@ -1,23 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Waiting for MySQL..."
-TRIES=0
-until mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" -e "SELECT 1" "${KLYP_DB_NAME}" >/dev/null 2>&1; do
-    TRIES=$((TRIES + 1))
-    if [ $TRIES -ge 40 ]; then
-        echo "MySQL not available after 2 minutes, aborting."
-        exit 1
-    fi
-    sleep 3
-done
-echo "MySQL is ready."
-
-echo "Importing schema..."
-grep -v -iE "^create database|^use " /var/www/html/init.sql | \
-    mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
-echo "Schema ready."
-
+# Generate db.php immediately so Apache can start without waiting for MySQL
 cat > /var/www/html/db.php <<PHP
 <?php
 try {
@@ -37,5 +21,18 @@ try {
     die('Error de conexión a la base de datos.');
 }
 PHP
+
+# Import schema in background once MySQL user is ready
+(
+    TRIES=0
+    until mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" \
+          -e "SELECT 1" "${KLYP_DB_NAME}" >/dev/null 2>&1; do
+        TRIES=$((TRIES + 1))
+        [ $TRIES -ge 60 ] && exit 0
+        sleep 3
+    done
+    grep -v -iE "^create database|^use " /var/www/html/init.sql | \
+        mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
+) &
 
 exec "$@"
