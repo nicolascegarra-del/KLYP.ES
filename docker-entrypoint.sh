@@ -1,7 +1,23 @@
 #!/bin/bash
 set -e
 
-# Generate db.php from environment variables set in Coolify
+echo "Waiting for MySQL at ${KLYP_DB_HOST}..."
+TRIES=0
+until mysqladmin ping -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" --silent 2>/dev/null; do
+    TRIES=$((TRIES + 1))
+    if [ $TRIES -ge 40 ]; then
+        echo "MySQL not available after 2 minutes, aborting."
+        exit 1
+    fi
+    sleep 3
+done
+echo "MySQL is ready."
+
+echo "Importing schema..."
+mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}" < /var/www/html/init.sql
+echo "Schema ready."
+
+# Generate db.php from environment variables
 cat > /var/www/html/db.php <<PHP
 <?php
 try {
