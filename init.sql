@@ -2,11 +2,12 @@ CREATE DATABASE IF NOT EXISTS klyp DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4
 USE klyp;
 
 CREATE TABLE IF NOT EXISTS aplicaciones (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    titulo      VARCHAR(100)  NOT NULL,
-    descripcion TEXT          NOT NULL,
-    icono       VARCHAR(50)   NOT NULL,
-    enlace      VARCHAR(255)  DEFAULT '#'
+    id                   INT AUTO_INCREMENT PRIMARY KEY,
+    titulo               VARCHAR(100)  NOT NULL,
+    descripcion          TEXT          NOT NULL,
+    contenido_extendido  TEXT          DEFAULT NULL,
+    icono                VARCHAR(50)   NOT NULL,
+    enlace               VARCHAR(255)  DEFAULT '#'
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS blog (
