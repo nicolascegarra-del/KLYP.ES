@@ -8,6 +8,6 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
-    ports:
-      - "${APP_PORT:-80}:80"
+    expose:
+      - "80"
     restart: unless-stopped
