@@ -19,7 +19,11 @@ try {
     <div>
         <h1 class="page-title">Hola, <?php echo htmlspecialchars($nombreUsuario); ?> 👋</h1>
         <p style="color:var(--gray); margin-top:4px; font-size:0.9rem; font-weight:600;">
-            <?php echo date('l, d \d\e F \d\e Y'); ?> · Panel de gestión Klyp
+            <?php
+            $dias   = ['Sunday'=>'Domingo','Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miércoles','Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sábado'];
+            $meses  = ['January'=>'Enero','February'=>'Febrero','March'=>'Marzo','April'=>'Abril','May'=>'Mayo','June'=>'Junio','July'=>'Julio','August'=>'Agosto','September'=>'Septiembre','October'=>'Octubre','November'=>'Noviembre','December'=>'Diciembre'];
+            echo $dias[date('l')] . ', ' . date('d') . ' de ' . $meses[date('F')] . ' de ' . date('Y');
+            ?> · Panel de gestión Klyp
         </p>
     </div>
     <a href="../index.php" target="_blank" class="btn" style="background:var(--pale); color:var(--accent);">
