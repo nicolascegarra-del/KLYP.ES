@@ -1,6 +1,7 @@
 <?php
 require 'db.php';
 $config = $pdo->query('SELECT * FROM configuracion WHERE id = 1')->fetch();
+if (!empty($config['modo_desarrollo'])) { include 'mantenimiento.php'; exit; }
 $posicion_blog = $config['posicion_noticias'] ?? 'sobre_contacto';
 
 function render_blog_section($pdo, $config) {

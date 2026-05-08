@@ -1,6 +1,7 @@
 <?php
 require 'db.php';
 $config = $pdo->query('SELECT * FROM configuracion WHERE id = 1')->fetch();
+if (!empty($config['modo_desarrollo'])) { include 'mantenimiento.php'; exit; }
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if (!$id) { header('Location: index.php'); exit; }

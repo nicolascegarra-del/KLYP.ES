@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS configuracion (
     posicion_noticias   VARCHAR(50)  DEFAULT 'sobre_contacto',
     texto_nosotros      TEXT         DEFAULT NULL,
     texto_hacemos       TEXT         DEFAULT NULL,
+    modo_desarrollo     TINYINT(1)   DEFAULT 0,
     razon_social        VARCHAR(150) DEFAULT '',
     cif                 VARCHAR(20)  DEFAULT '',
     direccion_fiscal    VARCHAR(255) DEFAULT '',

@@ -3,19 +3,19 @@
 // Guardar cambios
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     csrf_verify();
-    // Añadimos texto_nosotros y texto_hacemos a la consulta
-    $sql = "UPDATE configuracion SET email_contacto=?, instagram=?, linkedin=?, facebook=?, twitter=?, num_noticias_landing=?, posicion_noticias=?, texto_nosotros=?, texto_hacemos=? WHERE id=1";
+    $sql = "UPDATE configuracion SET email_contacto=?, instagram=?, linkedin=?, facebook=?, twitter=?, num_noticias_landing=?, posicion_noticias=?, texto_nosotros=?, texto_hacemos=?, modo_desarrollo=? WHERE id=1";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        $_POST['email'], 
-        $_POST['insta'], 
-        $_POST['linkedin'], 
-        $_POST['fb'], 
+        $_POST['email'],
+        $_POST['insta'],
+        $_POST['linkedin'],
+        $_POST['fb'],
         $_POST['tw'],
         $_POST['num_noticias'],
         $_POST['posicion_noticias'],
         $_POST['texto_nosotros'],
-        $_POST['texto_hacemos']
+        $_POST['texto_hacemos'],
+        isset($_POST['modo_desarrollo']) ? 1 : 0,
     ]);
     $mensaje = "¡Configuración guardada correctamente!";
 }
@@ -91,6 +91,20 @@ $config = $pdo->query("SELECT * FROM configuracion WHERE id=1")->fetch();
                 <label><i class="fab fa-twitter"></i> Twitter / X (URL)</label>
                 <input type="text" name="tw" value="<?php echo htmlspecialchars($config['twitter']); ?>">
             </div>
+        </div>
+
+        <div style="margin-top:30px; padding:20px; background:#fff8e1; border:1px solid #ffe082; border-radius:10px; display:flex; align-items:center; gap:15px;">
+            <label style="display:flex; align-items:center; gap:12px; cursor:pointer; margin:0;">
+                <input type="checkbox" name="modo_desarrollo" value="1"
+                       <?php echo !empty($config['modo_desarrollo']) ? 'checked' : ''; ?>
+                       style="width:20px; height:20px; cursor:pointer; accent-color:#e67e22;">
+                <div>
+                    <strong style="color:#e67e22; font-size:1rem;">🚧 Página en Desarrollo</strong>
+                    <p style="margin:4px 0 0; color:#888; font-size:0.85rem;">
+                        Activa esta opción para mostrar una página de "Próximamente" a los visitantes mientras trabajas en la web. El panel admin seguirá siendo accesible.
+                    </p>
+                </div>
+            </label>
         </div>
 
         <div style="margin-top: 20px; text-align: right;">
