@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once __DIR__ . '/security.php';
 session_secure_start();
 
