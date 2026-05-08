@@ -36,26 +36,25 @@ CREATE TABLE IF NOT EXISTS clientes (
     cp               VARCHAR(10)  DEFAULT NULL,
     poblacion        VARCHAR(100) DEFAULT NULL,
     provincia        VARCHAR(100) DEFAULT NULL,
-    estado           ENUM('activo','inactivo','pendiente') DEFAULT 'activo',
+    estado           VARCHAR(50)  DEFAULT 'En Pruebas',
     fecha_registro   DATETIME     DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS clientes_contactos (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT          NOT NULL,
-    nombre     VARCHAR(150) NOT NULL,
-    email      VARCHAR(150) DEFAULT NULL,
-    telefono   VARCHAR(30)  DEFAULT NULL,
-    cargo      VARCHAR(100) DEFAULT NULL,
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id      INT          NOT NULL,
+    nombre_contacto VARCHAR(150) NOT NULL,
+    telefono        VARCHAR(30)  DEFAULT NULL,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS suscripciones (
     id               INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id       INT            NOT NULL,
-    ciclo            ENUM('mensual','trimestral','semestral','anual') DEFAULT 'mensual',
+    aplicacion_id    INT            DEFAULT NULL,
+    ciclo            VARCHAR(20)    DEFAULT 'mensual',
     precio           DECIMAL(10,2)  NOT NULL,
-    estado           ENUM('activa','pausada','cancelada') DEFAULT 'activa',
+    estado           VARCHAR(50)    DEFAULT 'Activa',
     fecha_alta       DATE           DEFAULT (CURRENT_DATE),
     fecha_renovacion DATE           DEFAULT NULL,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE
@@ -92,8 +91,3 @@ INSERT IGNORE INTO configuracion (id) VALUES (1);
 
 INSERT IGNORE INTO usuarios_admin (nombre, usuario, password) VALUES
 ('Administrador', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
-
-INSERT IGNORE INTO aplicaciones (titulo, descripcion, icono, enlace) VALUES
-('Klyp Envío Nóminas',        'Automatiza el envío de nóminas con tan solo un Klyp.',                                     'fa-file-invoice', '#'),
-('Klyp Control de Especies',  'Gestiona tu Asociación de Criadores con un portal para socios y control de especies.',      'fa-crow',         '#'),
-('Klyp Gastos',               'Gestiona y contabiliza automáticamente los gastos de tus empleados.',                       'fa-euro-sign',    '#');
