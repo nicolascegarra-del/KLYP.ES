@@ -1,20 +1,46 @@
 services:
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: klyp
+      MYSQL_USER: klyp
+      MYSQL_PASSWORD: ${KLYP_DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${KLYP_DB_ROOT_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "klyp", "-p${KLYP_DB_PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - klyp_net
+
   web:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      KLYP_DB_HOST: ${KLYP_DB_HOST}
-      KLYP_DB_NAME: ${KLYP_DB_NAME}
-      KLYP_DB_USER: ${KLYP_DB_USER}
+      KLYP_DB_HOST: db
+      KLYP_DB_NAME: klyp
+      KLYP_DB_USER: klyp
       KLYP_DB_PASS: ${KLYP_DB_PASS}
     expose:
       - "80"
-    networks:
-      - coolify
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
+    networks:
+      - klyp_net
+
+volumes:
+  db_data:
 
 networks:
-  coolify:
+  klyp_net:
     external: true
     name: coolify
