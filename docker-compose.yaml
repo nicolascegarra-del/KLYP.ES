@@ -10,4 +10,11 @@ services:
       DB_PASS: ${DB_PASS}
     expose:
       - "80"
+    networks:
+      - coolify
     restart: unless-stopped
+
+networks:
+  coolify:
+    external: true
+    name: coolify
