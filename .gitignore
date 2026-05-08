@@ -1,0 +1,15 @@
+# Credenciales y configuración local
+db.php
+
+# Archivos temporales y de sistema
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Configuración interna de herramientas
+.claude/
+
+# Uploads de usuario (si los hay)
+assets/uploads/
