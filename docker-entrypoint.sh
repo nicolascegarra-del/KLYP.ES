@@ -25,14 +25,14 @@ PHP
 # Import schema in background once MySQL user is ready
 (
     TRIES=0
-    until mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" \
+    until mysql --ssl-mode=DISABLED -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" \
           -e "SELECT 1" "${KLYP_DB_NAME}" >/dev/null 2>&1; do
         TRIES=$((TRIES + 1))
         [ $TRIES -ge 200 ] && exit 0
         sleep 3
     done
     grep -v -iE "^create database|^use " /var/www/html/init.sql | \
-        mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
+        mysql --ssl-mode=DISABLED -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
 ) &
 
 exec "$@"
