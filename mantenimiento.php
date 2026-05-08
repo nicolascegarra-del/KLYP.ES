@@ -38,7 +38,6 @@
         }
         .logo img {
             height: 48px;
-            filter: brightness(0) invert(1);
         }
 
         .badge {
