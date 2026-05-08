@@ -1,6 +1,7 @@
 FROM php:8.2-apache
 
-# PHP extensions needed
+# PHP extensions and MySQL client
+RUN apt-get update && apt-get install -y default-mysql-client && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Apache modules
