@@ -1,13 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "Waiting for MySQL at ${KLYP_DB_HOST}..."
-until mysqladmin ping -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" --silent 2>/dev/null; do
-    echo "MySQL not ready yet, retrying in 3s..."
-    sleep 3
-done
-echo "MySQL is ready."
-
 # Generate db.php from environment variables set in Coolify
 cat > /var/www/html/db.php <<PHP
 <?php
