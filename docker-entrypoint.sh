@@ -6,9 +6,9 @@ cat > /var/www/html/db.php <<PHP
 <?php
 try {
     \$pdo = new PDO(
-        'mysql:host=${DB_HOST};dbname=${DB_NAME};charset=utf8mb4',
-        '${DB_USER}',
-        '${DB_PASS}',
+        'mysql:host=${KLYP_DB_HOST};dbname=${KLYP_DB_NAME};charset=utf8mb4',
+        '${KLYP_DB_USER}',
+        '${KLYP_DB_PASS}',
         [
             PDO::ATTR_ERRMODE                  => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE       => PDO::FETCH_ASSOC,
