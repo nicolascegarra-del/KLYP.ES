@@ -11,10 +11,11 @@ services:
       - db_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "klyp", "-p${KLYP_DB_PASS}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 20
+      start_period: 60s
     restart: unless-stopped
     networks:
       - klyp_net
