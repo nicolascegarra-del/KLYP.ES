@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-echo "Waiting for MySQL at ${KLYP_DB_HOST}..."
+echo "Waiting for MySQL..."
 TRIES=0
-until mysqladmin ping -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" --silent 2>/dev/null; do
+until mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" -e "SELECT 1" "${KLYP_DB_NAME}" >/dev/null 2>&1; do
     TRIES=$((TRIES + 1))
     if [ $TRIES -ge 40 ]; then
         echo "MySQL not available after 2 minutes, aborting."
@@ -14,10 +14,10 @@ done
 echo "MySQL is ready."
 
 echo "Importing schema..."
-mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}" < /var/www/html/init.sql
+grep -v -iE "^create database|^use " /var/www/html/init.sql | \
+    mysql -h"${KLYP_DB_HOST}" -u"${KLYP_DB_USER}" -p"${KLYP_DB_PASS}" "${KLYP_DB_NAME}"
 echo "Schema ready."
 
-# Generate db.php from environment variables
 cat > /var/www/html/db.php <<PHP
 <?php
 try {
